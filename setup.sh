@@ -11,8 +11,22 @@
 #   DOMAIN_NAME       — PascalCase, single word (regex: ^[A-Z][A-Za-z]*$)
 #   PRIMARY_DOMAINS   — 1-200 chars, no <>&
 #   RECURRING_TASKS   — optional; empty or "(skip)" allowed
+#
+# Convenience: if `setup.env` exists in the same directory as this script,
+# its variable assignments are auto-sourced before validation.
+# See setup.env.example for the file format.
 
 set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ENV_FILE="$SCRIPT_DIR/setup.env"
+if [ -f "$ENV_FILE" ]; then
+  set -a
+  # shellcheck disable=SC1090
+  source "$ENV_FILE"
+  set +a
+  echo "Loaded environment from $ENV_FILE" >&2
+fi
 
 MODE="${1:-substitute}"
 

@@ -19,6 +19,23 @@ Semantic versioning:
 
 ---
 
+## 2026-04-25 — v0.1.1 — setup.env auto-source + .gitignore
+
+- Kind: minor
+- Source: source vault Phase 6 dogfood Layer 3 (UX gap discovered when running `./setup.sh` without env vars produced bare error message; user expected interactive or env-file workflow)
+- Affected:
+  - new: `setup.env.example` — annotated env file with validation rules per variable
+  - new: `.gitignore` — excludes `setup.env` (contains absolute paths), `.bak/`, OS metadata
+  - modified: `setup.sh` — auto-sources `setup.env` if present in script directory (lines 19-26)
+  - modified: `SETUP.md` §2 — restructured to A (skill-driven) / B (env file, recommended for external users) / C (inline env vars for CI). Added validation rules table.
+  - modified: `tests/test_setup.sh` — added Test 6 (setup.env auto-source)
+- Migration (existing v0.1.0 users): no-op. The env-var inline workflow still works exactly as before. `setup.env` auto-sourcing is opt-in (only triggers if file exists). To adopt the new flow: `cp setup.env.example setup.env && $EDITOR setup.env`.
+- Breaking: no
+
+Backward-compatibility verified by Test 6 (env file path) plus T1-T5 (inline env vars path) all PASS.
+
+---
+
 ## 2026-04-24 — v0.1.0 — Initial template release
 
 - Kind: major (initial)

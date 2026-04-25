@@ -85,6 +85,25 @@ remaining=$(find . -name "*.tmpl" 2>/dev/null | wc -l | tr -d ' ')
 assert_eq "T5 dry-run: .tmpl preserved" "2" "$remaining"
 cd - > /dev/null
 
+# Test 6: setup.env auto-source
+TEST_DIR=$(make_test_dir)
+cat > "$TEST_DIR/setup.env" <<EOF
+PROJECT_NAME=Env_File_Vault
+DOMAIN_NAME=Marketing
+PRIMARY_DOMAINS="loaded from env file"
+RECURRING_TASKS=""
+VAULT_ABS_PATH=$TEST_DIR
+EOF
+unset PROJECT_NAME DOMAIN_NAME PRIMARY_DOMAINS RECURRING_TASKS VAULT_ABS_PATH
+cd "$TEST_DIR" && ./setup.sh > /dev/null 2>&1
+result=$(cat test1.md 2>/dev/null || echo "MISSING")
+assert_eq "T6 setup.env auto-sourced: substitution succeeded" "Project: Env_File_Vault, Path: $TEST_DIR" "$result"
+cd - > /dev/null
+export PROJECT_NAME="My_Vault"
+export DOMAIN_NAME="Marketing"
+export PRIMARY_DOMAINS="marketing campaigns"
+export RECURRING_TASKS=""
+
 echo ""
 echo "Tests: $((PASS + FAIL)) total, $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

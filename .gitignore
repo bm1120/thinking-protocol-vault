@@ -1,0 +1,18 @@
+# User-local setup configuration. Contains absolute paths and possibly
+# domain-specific values; should not be committed by template consumers.
+# Use setup.env.example as the tracked starting point.
+setup.env
+
+# Backup directory created by setup.sh during substitution; auto-removed
+# on success. Listed here in case the script is interrupted mid-run.
+.bak/
+
+# macOS metadata
+.DS_Store
+._*
+
+# Python cache
+scripts/__pycache__/
+
+# Obsidian workspace state (per-machine, churns frequently)
+.obsidian/

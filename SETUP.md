@@ -15,11 +15,11 @@
 
 ## 2. 시작 (5분)
 
-두 가지 경로:
+세 가지 경로:
 
-### A. Skill-driven (추천)
+### A. Skill-driven (Source vault 보유 시 추천)
 
-새 디렉토리에서 Claude Code 시작 → `port-vault` skill 호출 → 5개 질문 답 → 자동 setup.
+Source vault (`port-vault` skill 보유)에서 호출 → 5개 질문 답 → 자동 setup.
 
 ```bash
 mkdir my-vault && cd my-vault
@@ -28,23 +28,53 @@ claude
 # > port-vault skill을 사용해 이 디렉토리를 설정해줘
 ```
 
-### B. Manual (fallback)
+### B. Env file (외부 사용자 추천)
 
-이 template 디렉토리를 복사하고 환경변수 정의 후 setup.sh 실행:
+GitHub template repo에서 새 repo 생성하거나 `_template/`을 복사한 뒤, `setup.env.example`을 편집해 실행:
 
 ```bash
+# 1) Template 가져오기
+#    Option 1: GitHub template "Use this template" 버튼 → clone
+gh repo clone <owner>/<your-new-vault-repo>
+cd <your-new-vault-repo>
+
+#    Option 2: 로컬 복사
 cp -r /path/to/_template/ my-vault/
 cd my-vault
 
-export PROJECT_NAME="My_Vault"
-export VAULT_ABS_PATH="$(pwd)"
-export DOMAIN_NAME="Marketing"
-export PRIMARY_DOMAINS="marketing campaign design and customer journey analysis"
-export RECURRING_TASKS=""   # 선택, "(skip)" 또는 빈 문자열 가능
+# 2) Env 파일 준비 + 편집
+cp setup.env.example setup.env
+$EDITOR setup.env   # 5개 변수 채우기 (주석에 validation rule 명시)
 
+# 3) 실행
 ./setup.sh
 ./setup.sh --verify   # 모든 placeholder 치환됐는지 확인
 ```
+
+`setup.sh`는 동일 디렉토리에 `setup.env`가 있으면 자동으로 source합니다. `setup.env`는 .gitignore에 추가하거나 해당 vault 안에서만 보관하세요 (절대경로 노출 가능).
+
+### C. Inline env vars (CI/one-shot)
+
+env file 두지 않고 일회성으로:
+
+```bash
+PROJECT_NAME=My_Vault \
+DOMAIN_NAME=Marketing \
+PRIMARY_DOMAINS="IT 제품 기획, 의사결정 분석" \
+RECURRING_TASKS="" \
+VAULT_ABS_PATH="$(pwd)" \
+./setup.sh
+```
+
+### Validation rules (요약)
+
+| 변수 | 규칙 | 예시 |
+|---|---|---|
+| `PROJECT_NAME` | `^[A-Za-z][A-Za-z0-9_]*$` (공백/한글 X) | `My_Vault`, `MyVault` |
+| `DOMAIN_NAME` | `^[A-Z][A-Za-z]*$` (단일 PascalCase, `_`/숫자 X) | `Marketing`, `Engineering` |
+| `PRIMARY_DOMAINS` | 1–200 chars, `<>&` 금지 (한글 OK) | `"IT 제품 기획, 의사결정 분석"` |
+| `RECURRING_TASKS` | optional, 빈 문자열 또는 `(skip)` | `"주간 회고"` 또는 `""` |
+| `VAULT_ABS_PATH` | 존재하는 디렉토리 절대경로 | `$(pwd)` 또는 `/Users/me/my-vault` |
 
 ## 3. 환경 의존성 점검
 
