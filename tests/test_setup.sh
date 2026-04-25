@@ -104,6 +104,16 @@ export DOMAIN_NAME="Marketing"
 export PRIMARY_DOMAINS="marketing campaigns"
 export RECURRING_TASKS=""
 
+# Test 7: substitute mode auto-verify exits 0 (no false-positive orphans)
+# Regression guard for v0.1.1 bug: setup.sh and tests/ contain legitimate
+# {{VAR}} patterns that the orphan scan was incorrectly flagging.
+TEST_DIR=$(make_test_dir)
+export VAULT_ABS_PATH="$TEST_DIR"
+exit_code=0
+cd "$TEST_DIR" && ./setup.sh > /dev/null 2>&1 || exit_code=$?
+assert_eq "T7 substitute auto-verify: exit code 0" "0" "$exit_code"
+cd - > /dev/null
+
 echo ""
 echo "Tests: $((PASS + FAIL)) total, $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

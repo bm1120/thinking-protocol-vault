@@ -19,6 +19,23 @@ Semantic versioning:
 
 ---
 
+## 2026-04-25 — v0.1.2 — verify mode false-positive fix
+
+- Kind: patch
+- Source: source vault Phase 6 dogfood Layer 3 (verify reported `FAIL: 9 orphan {{VAR}} markers found` after a successful substitute, blocking deployment confidence even when output files were clean)
+- Affected:
+  - modified: `setup.sh` verify mode (lines 107-117) — exclude `setup.sh` itself and `tests/` directory from orphan scan; the 9 `{{VAR}}` patterns in those files are intentional (sed commands + test fixtures, not deployment artifacts)
+  - modified: `setup.sh` orphan grep — wrap in `(grep ... || true)` so the empty-match case (grep exit 1) does not trip `set -euo pipefail` and silently abort the script
+  - modified: `tests/test_setup.sh` — added Test 7: substitute mode invokes auto-verify; assert exit code 0 (regression guard for the silent-abort bug)
+- Migration: re-run `./setup.sh --verify` to confirm clean state. Previous v0.1.1 substitute-mode runs that appeared to fail (silent exit 1 after substituting all `.tmpl` files) actually succeeded — the abort happened *after* the deployment files were written, in the auto-verify step.
+- Breaking: no
+
+Two latent bugs surfaced together: (1) verify orphan check did not exclude its own substitution code, so the 9 legitimate patterns produced FAIL output; (2) when those 9 patterns were excluded, grep returned 0 matches → exit 1 → pipefail → silent abort. Test 7 covers both because it exercises the substitute → auto-verify path end-to-end.
+
+All 8 tests PASS (T1.1, T1.2, T2, T3, T4, T5, T6, T7).
+
+---
+
 ## 2026-04-25 — v0.1.1 — setup.env auto-source + .gitignore
 
 - Kind: minor
