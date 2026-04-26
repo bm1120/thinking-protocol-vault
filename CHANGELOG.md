@@ -151,16 +151,22 @@ These 12 items are flagged for monitoring without immediate action. Each names a
 17. **Vault-evolution agent specialization deferred (v0.3.0, 2026-04-26)** — proposed `context-engineer` and `harness-engineer` subagents were considered as alternatives to skills, but rejected for now because (a) general-purpose subagent + task prompt produces equivalent isolated context, (b) current 6 stage-specific agents would lose pattern coherence with meta-agents, (c) usage frequency is too low to amortize agent design cost.
     - Trigger to revisit: vault evolution count ≥ 3 distinct sub-projects in a single phase → task-prompt construction cost accumulates → specialized agent prebake becomes worthwhile.
     - Status: explicitly deferred at design time, not a missed item. Skills carry the discipline; agents are an optimization for high-frequency cases.
+18. **Template upgrade gap — plugin distribution candidate (v0.3.0, 2026-04-26)** — current architecture (Phase 6 Q4-C: "template + manual merge") propagates updates to NEW vaults only at instantiation time. Existing vaults receive no updates without manual `curl` per file. Evidence threshold met: 4 migrations in 1 day (v0.1.0 → v0.1.1 → v0.1.2 → v0.2.0 → v0.3.0), accumulating ~10+ files of drift per long-running vault. As of v0.3.0 there are no actual long-running external deployments — but this gap will dominate any future external adoption.
+    - Candidate solution: Claude Code plugin distribution. Pack `.claude/skills/`, `.claude/agents/`, `.claude/hooks/`, and Core protocol files (`Core_Thinking_Protocol.md`, `Stage_Transition_Rules.md`, `Research_Integration_Protocol.md`) as a separate plugin repo (e.g., `bm1120/thinking-protocol-plugin`). Vault scaffold repo retains user-layer files (`CLAUDE.md.tmpl`, `<Domain>_Context.md.tmpl`, KB seeds, decision templates, `setup.sh`). Users do `/plugin install` once + `/plugin update` thereafter for system-layer refresh; user-layer files preserved across updates.
+    - Trigger to design: **Phase 7-2 brainstorming priority 1** after Phase 7-1 Layer 3 dogfood (Task 7). Phase 7-1 dogfood may surface enforcement needs that affect the plugin scope (e.g., if hook-based enforcement becomes essential, plugin distribution becomes more urgent).
+    - Open questions for Phase 7-2: pure plugin (A) vs hybrid template+plugin (B) vs template+sync_script (C — original Q4-D); layer marking metadata; offline / non-Claude-Code-CLI fallback; two-repo build automation from single `_template/` source; existing-vault migration story (currently n=0 external).
+    - Status: actively flagged with sufficient evidence; queued behind dogfood for proper sequencing.
 
 ---
 
 ## Pending design decisions (deferred to Phase 7+)
 
-Per spec §8 Out-of-scope:
+**Phase 7-2 brainstorming priority 1 (evidence-supported, queued post-Phase-7-1-dogfood):**
+- **Plugin distribution architecture** (Watch 18) — pure plugin / hybrid template+plugin / template+sync_script. Subsumes the previously-listed `sync_template.sh --check` and `Auto 3-way merge` items.
+
+**Phase 7-2+ backlog (less urgent):**
 - GitHub-mode skill (clone from external repo)
 - Windows / PowerShell `setup.ps1`
-- Auto 3-way merge for upgrades
-- `sync_template.sh --check` automation
 - `co-execution-planner` skill extraction
 - User-side template forking workflow
 
