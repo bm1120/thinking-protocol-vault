@@ -156,6 +156,10 @@ These 12 items are flagged for monitoring without immediate action. Each names a
     - Trigger to design: **Phase 7-2 brainstorming priority 1** after Phase 7-1 Layer 3 dogfood (Task 7). Phase 7-1 dogfood may surface enforcement needs that affect the plugin scope (e.g., if hook-based enforcement becomes essential, plugin distribution becomes more urgent).
     - Open questions for Phase 7-2: pure plugin (A) vs hybrid template+plugin (B) vs template+sync_script (C — original Q4-D); layer marking metadata; offline / non-Claude-Code-CLI fallback; two-repo build automation from single `_template/` source; existing-vault migration story (currently n=0 external).
     - Status: actively flagged with sufficient evidence; queued behind dogfood for proper sequencing.
+19. **Research integration loop only Step 1 partially automated (v0.3.0, 2026-04-26)** — `scripts/fetch_research.py` exists and is permitted in `settings.json`, but no scheduler invokes it (no crontab, no hook). Header claims "매일 아침 9시 업데이트" but is design intent only. As of this entry: 12+ feed entries accumulated since Apr 22, none processed through CLAUDE.md §7 Steps 2-6 (Extract Claim → Map to Stage → Draft Rule Change → Shadow Test → Merge or Reject). Researcher subagent is never invoked automatically.
+    - Mitigation applied at v0.3.0: `session-start.sh` hook now detects feed staleness (≥ 1 day since last modification) and emits a reminder line ("⚠️ Research feed last updated N day(s) ago. Run …") into session context. This is **opt-in nudge only**: no auto-fetch, no auto-absorption.
+    - Open for Phase 7-2: full automation (CronCreate to fetch + auto-invoke researcher subagent on new entries). Risks: Shadow Test (Step 5) requires LLM judgment that may not be safe to fully automate; auto-merge into protocol files violates current human-in-the-loop discipline.
+    - Status: Phase 7-2 candidate — likely paired with plugin distribution (Watch 18) since both touch the harness layer.
 
 ---
 
