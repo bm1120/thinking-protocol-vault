@@ -116,9 +116,9 @@ A list of ≥ 15 candidate ideas, no ranking, no categorization, logged in `00_I
 
 ### Checklist
 
-- Target ≥ 15 ideas.
-- Use ≥ 1 Remote-Association pass (forced connection between distant concepts).
-- Include ≥ 3 Worst-Possible candidates (deliberately bad ideas to surface constraints).
+- Run the mandatory ideation chain in full: `scamper-ideation` (all 7 substeps) → `remote-association-matrix` (≥ 5 pairings) → `worst-possible-idea` (≥ 3 inversions).
+- Total ≥ 15 ideas across the chain, presented in 3 sections grouped by source skill.
+- User-specified N is treated as a floor (not ceiling); chain runs in full.
 - Explicitly state "no evaluation performed" at the end of the list.
 
 ### Antipatterns
@@ -133,6 +133,8 @@ A list of ≥ 15 candidate ideas, no ranking, no categorization, logged in `00_I
 ### Neuroscience evidence
 
 Divergent generation is associated with the Default Mode Network (DMN), which supports spontaneous, remote-associative search across semantic memory. During genuine divergence the evaluative Central Executive Network (CEN) partially suppresses, permitting weakly-associated concepts to surface without premature rejection. This is why evaluation during generation is a neurological antipattern, not just a process one — the act of critiquing activates CEN and inhibits the DMN search it is supposed to follow. See `[[Divergent_vs_Convergent]]`, `[[DMN_CEN_Switching]]`.
+
+> **Default ideation chain (Phase 7-1, 2026-04-26):** When `ideator` is invoked, it runs the mandatory 3-skill chain (`scamper-ideation` + `remote-association-matrix` + `worst-possible-idea`) producing ≥ 15 grouped ideas. Main orchestration auto-invokes `diverge-compression` once the ideator returns (threshold ≥ 15).
 
 ## Stage 3: Incubate
 

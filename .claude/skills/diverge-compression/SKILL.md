@@ -1,6 +1,6 @@
 ---
 name: diverge-compression
-description: Pre-categorize a Diverge output of ≥ 25 ideas into 5–10 groups before Converge dispatch, to keep validator's working memory tractable. Preserves original idea numbers.
+description: Pre-categorize a Diverge output of ≥ 15 ideas into 5–10 groups before Converge dispatch, to keep validator's working memory tractable. Preserves original idea numbers.
 ---
 
 # diverge-compression
@@ -12,10 +12,10 @@ description: Pre-categorize a Diverge output of ≥ 25 ideas into 5–10 groups 
 
 ALL must be true:
 1. Diverge output is complete (≥ 15 ideas, "no evaluation performed" trailer present).
-2. Idea count ≥ 25.
+2. Idea count ≥ 15.
 3. Caller is the main orchestration agent, NOT the ideator (ideator's job is generation, not categorization — invoking this from inside Diverge would violate mode separation).
 
-If idea count < 25, do NOT invoke. The validator can handle 15–24 ideas without compression.
+If idea count < 15, do NOT invoke. Below 15 the Diverge stage is incomplete; route back to ideator.
 
 ## Procedure
 
@@ -63,12 +63,13 @@ Categorization is structural, not evaluative. Validator should critique each clu
 - Dropping ideas during compression. → Every original idea must appear in either a cluster or the Singletons list.
 - Ranking clusters by quality. → That's Converge. The compression is structural sorting only.
 - Generating new ideas while compressing. → Route those back to Diverge in a follow-up session; do not slip them into clusters.
-- Invoking when count < 25. → Validator handles 15–24 directly; compression adds latency and hides micro-distinctions in small lists.
+- Invoking when count < 15. → Below 15 the Diverge stage is incomplete; the chain is broken, not the threshold.
 
 ## References
 
 - `Core_Thinking_Protocol.md#stage-2-diverge` — the upstream stage.
 - `Stage_Transition_Rules.md#2--3-diverge--incubate` — the transition this fits inside (compression happens between exit of stage 2 and entry of stage 3).
 - Phase 4 dogfood "망가진 것" #5 — the originating problem.
+- Phase 7-1 dogfood — chain enforcement and threshold lowering.
 
 Output to user in Korean (categorization themes in Korean for vault consistency).

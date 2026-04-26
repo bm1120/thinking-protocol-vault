@@ -55,13 +55,13 @@ The `stage-transition-check` skill uses this file to answer "can we move to the 
 - ≥ 1 Remote-Association idea included.
 - ≥ 3 Worst-Possible candidates included.
 - List dated and stored in `00_Idea_Inbox/`.
-- If idea count ≥ 25, a `diverge-compression` artifact (5–10 clusters with original idea numbers preserved) exists alongside the full list. (Generation: main orchestration agent invokes `diverge-compression` skill before this transition. If count < 25, no artifact required — full list alone is sufficient.)
+- If idea count ≥ 15, a `diverge-compression` artifact (5–10 clusters with original idea numbers preserved) exists alongside the full list. (Generation: main orchestration agent invokes `diverge-compression` skill before this transition. If count < 15, no artifact required — full list alone is sufficient. Below 15, Diverge stage is incomplete; route back to ideator.)
 
 #### Hand-off artifact
 
 - The dated idea list with capture timestamp.
 - Reference back to the Frame problem statement.
-- If idea count ≥ 25: the `diverge-compression` artifact (5–10 clusters with original idea numbers preserved). If count < 25: no compression artifact — full list alone is the handoff.
+- If idea count ≥ 15: the `diverge-compression` artifact (5–10 clusters with original idea numbers preserved). If count < 15: no compression artifact — full list alone is the handoff. (Below 15: Diverge incomplete, route back to ideator.)
 
 #### Common rollback triggers
 

@@ -19,6 +19,22 @@ Semantic versioning:
 
 ---
 
+## 2026-04-26 — v0.2.0 — Diverge chain enforcement + compression threshold
+
+- Kind: minor (behavior change, backward-compatible setup)
+- Source: source vault Phase 6 Layer 3 dogfood + Phase 7-1 spec
+- Affected:
+  - modified: `.claude/agents/ideator.md` — Calls section converted from optional menu (≥ 1 of remote-assoc / SCAMPER) to mandatory 3-skill chain (SCAMPER + Remote-Association-Matrix + Worst-Possible-Idea). Output reformatted to 3 grouped sections with continuous numbering. User-N reframed as floor (not ceiling) with transparency line.
+  - modified: `.claude/skills/diverge-compression/SKILL.md` — invocation threshold ≥ 25 → ≥ 15 (4 sites). Sub-15 case reframed as "Diverge stage incomplete; route back to ideator".
+  - modified: `Stage_Transition_Rules.md` — lines 58 and 64 aligned to ≥ 15 threshold. (This file was missing from the original Phase 7-1 plan; the cross-file gap was caught in Task 2 code review and resolved before further tasks.)
+  - modified: `Core_Thinking_Protocol.md` Stage 2 — 1-line note recording the chain default and auto-compression coupling, plus Checklist updated to mandate the full 3-skill chain.
+- Migration (existing v0.1.x deployments): pull the four updated files via `curl` from `https://raw.githubusercontent.com/bm1120/thinking-protocol-vault/main/...`, or generate a fresh vault from the updated template repo (recommended for clean Layer 3 dogfood attribution).
+- Breaking: no (no setup procedure change, no env-var change).
+
+Driver: Phase 6 Layer 3 dogfood (n = 1) where the ideator produced 5 ideas in response to a "5개 brainstorm" request despite its own `## Principles` mandating ≥ 15. Root cause: the existing Calls section allowed ≥ 1 of remote-assoc / SCAMPER to satisfy the force-distance rule, and a single skill cannot reach ≥ 15 substep outputs.
+
+---
+
 ## 2026-04-25 — v0.1.2 — verify mode false-positive fix
 
 - Kind: patch
@@ -101,6 +117,12 @@ These 12 items are flagged for monitoring without immediate action. Each names a
 10. **diverge-compression caller restriction is honor-system** (source vault Phase 5 T5 review I3) — ideator could in principle invoke. Trigger: dogfood shows ideator self-invoking compression.
 11. **diverge-compression Singletons unbounded** (source vault Phase 5 T5 review M3) — degenerate output legal. Trigger: dogfood produces compression with > 15% Singletons.
 12. **diverge-compression cluster-order implicit ranking** (source vault Phase 5 T5 review M4) — explicit ranking banned but order can imply ranking. Trigger: dogfood reveals reader bias toward Cluster 1.
+13. **diverge-compression threshold lowered ≥ 25 → ≥ 15 (Phase 7-1, 2026-04-26)** — partly speculative based on n = 1 Phase 6 dogfood. The mandatory chain in ideator is evidence-supported; the compression threshold change is not directly evidenced (we have no dogfood of how 16-idea output is digested).
+    - Trigger to revert: next Layer 3 dogfood shows users skip the cluster view OR evaluate directly from the grouped raw output → restore threshold to ≥ 25 and downgrade Watch to closed-by-revert.
+    - Trigger to escalate: cluster view becomes the primary candidate-selection surface → make "Below 15 incomplete" explicit in `Stage_Transition_Rules.md` (currently asserted only in `diverge-compression/SKILL.md`).
+14. **`diverge-compression` precondition #1 expects "no evaluation performed" trailer that ideator does not emit (pre-existing)** — `_template/.claude/skills/diverge-compression/SKILL.md` line 14 declares the trailer as a hard precondition; ideator's `## Output` trailer reads "Diverge 완료. ... Hand off to `incubator` (do not skip)." with no "no evaluation performed" phrase. This mismatch was present BEFORE Phase 7-1 (the old handoff also lacked the trailer); it surfaced during the v0.2.0 code review.
+    - Trigger to fix: any future cycle that touches either ideator's `## Output` section OR `diverge-compression`'s preconditions → resolve by either (a) adding "No evaluation performed." to ideator's handoff trailer, or (b) softening compression precondition #1 from a literal-string check to a semantic check.
+    - Status: pre-existing, not introduced by Phase 7-1; deferred from Phase 7-1 fix-up scope to keep the change set focused.
 
 ---
 
