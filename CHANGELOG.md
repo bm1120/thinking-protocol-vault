@@ -19,6 +19,23 @@ Semantic versioning:
 
 ---
 
+## 2026-04-26 — v0.3.0 — Vault evolution skills (context-engineering + harness-modification)
+
+- Kind: minor (additive — 2 new workflow skills, no spec breakage, no setup procedure change)
+- Source: post-Phase-7-1 design discussion (vault-evolution discipline separation)
+- Affected:
+  - new: `.claude/skills/context-engineering/SKILL.md` — workflow skill for vault context-layer changes (CLAUDE.md, agent.md, SKILL.md, *_Context.md, Stage_Transition_Rules.md, Core_Thinking_Protocol.md). Includes Step 0 trigger detection + diagnosis (A/B/C/D/E routing), Complexity gate (Trivial inline / Non-trivial → brainstorming), 6-step procedure, Anti-Pattern #6 enforcement.
+  - new: `.claude/skills/harness-modification/SKILL.md` — workflow skill for vault harness-layer changes (`.claude/hooks/*.sh`, `.claude/settings.json`, `scripts/*.py`, `scripts/*.sh`). Same Step 0 / Complexity gate / 6-step structure, with TDD-style Step 3 (mock input → expected output + exit code).
+  - modified: `CLAUDE.md` §6 routing table — 2 new rows for context-engineering and harness-modification triggers (direct + symptom-based).
+- Migration (existing v0.2.x deployments): pull 2 new SKILL.md files via `curl` from `https://raw.githubusercontent.com/bm1120/thinking-protocol-vault/main/.claude/skills/{context-engineering,harness-modification}/SKILL.md`, plus the updated `CLAUDE.md` for the routing rows. Or generate a fresh vault from the updated template repo.
+- Breaking: no (no setup procedure change, no env-var change, no behavioral change to existing skills/agents).
+
+Skill counts: template now ships **16 skills** (was 14 at v0.2.x). Source vault has **17** (the additional one is `port-vault`, source-only by design — see v0.1.0 entry note).
+
+Driver: post-Phase-7-1 reflection — Phase 7-1 made spec-only edits (markdown) but the user identified that future enforcement work would need a **separate discipline** (harness layer: hooks, settings, scripts) and that **trigger detection** should handle symptom-based phrasing ("이런 에러", "시스템적으로 처리해야") not just direct requests ("hook 추가해줘"). Two skills codify this: one for context, one for harness, with shared Step 0 diagnosis pattern + Anti-Pattern #6 gating.
+
+---
+
 ## 2026-04-26 — v0.2.0 — Diverge chain enforcement + compression threshold
 
 - Kind: minor (behavior change, backward-compatible setup)
@@ -128,6 +145,12 @@ These 12 items are flagged for monitoring without immediate action. Each names a
 15. **Zero-slack coupling: chain floor = compression threshold (Phase 7-1, 2026-04-26)** — the mandatory chain in `ideator.md` declares per-skill floors (SCAMPER ≥ 7, remote-assoc ≥ 5, worst-possible ≥ 3) that sum to exactly 15, and the `diverge-compression` invocation threshold is also exactly ≥ 15. Any single chain skill underproducing by one item (e.g., a model returning 4 pairings instead of 5 on a lean run) drops the total to 14, at which point compression refuses to invoke and `Stage_Transition_Rules.md` pre-check fails the ≥ 15 gate. The orchestrator is then forced to route back to ideator with no documented retry cap.
     - Trigger to mitigate: any future Layer 3 dogfood produces a 14-idea Diverge output → either (a) widen one or more skill floors so chain output reliably exceeds 15 with margin, or (b) lower compression threshold to ≥ 13 to absorb the slack, or (c) add an explicit retry-and-fallback policy to ideator (e.g., "if total < 15, run worst-possible-idea twice") with a cap (e.g., 2 retries before degrading session).
     - Status: identified during Phase 7-1 final review. Has not yet manifested in a dogfood, but the brittleness is structural in the current design and will surface eventually.
+16. **Vault-evolution skills' Step 0 diagnosis honor-system (v0.3.0, 2026-04-26)** — `context-engineering` and `harness-modification` both gate Step 1 entry on Anti-Pattern #6 evidence (≥ 2 spec violations OR plan task OR Watch trigger). The gate is a markdown instruction with no runtime enforcement; an over-eager session could skip Step 0 and proceed to Step 1 directly.
+    - Trigger to harden: ≥ 2 instances observed where Step 0 was skipped → the speculative engineering it should have caught caused over-built changes. Resolve by adding a hook that scans for "Skipping Step 0" patterns in vault-evolution commits, OR by demoting both skills to require an explicit "diagnosis" parameter from caller before proceeding.
+    - Status: same honor-system pattern as Watch 8 (revisit-reminder) and Watch 10 (diverge-compression caller restriction). Proportional to actual misuse; not pre-emptively hardened.
+17. **Vault-evolution agent specialization deferred (v0.3.0, 2026-04-26)** — proposed `context-engineer` and `harness-engineer` subagents were considered as alternatives to skills, but rejected for now because (a) general-purpose subagent + task prompt produces equivalent isolated context, (b) current 6 stage-specific agents would lose pattern coherence with meta-agents, (c) usage frequency is too low to amortize agent design cost.
+    - Trigger to revisit: vault evolution count ≥ 3 distinct sub-projects in a single phase → task-prompt construction cost accumulates → specialized agent prebake becomes worthwhile.
+    - Status: explicitly deferred at design time, not a missed item. Skills carry the discipline; agents are an optimization for high-frequency cases.
 
 ---
 
