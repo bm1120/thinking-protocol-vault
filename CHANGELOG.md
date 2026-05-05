@@ -19,6 +19,19 @@ Semantic versioning:
 
 ---
 
+## v0.4.1 — 2026-05-06 — Phase 7-3: Research feed pre-filter
+
+- Kind: harness-modification (script edit, no protocol change)
+- Source: `docs/superpowers/specs/2026-05-06-phase-7-3-research-prefilter-design.md`; plan `docs/superpowers/plans/2026-05-06-phase-7-3-research-prefilter.md`
+- Affected files: `scripts/fetch_research.py` (+ `should_skip`, `log_skip`, `_match_keyword`, integrated into `main`), `_template/scripts/fetch_research.py` (sync), `_template/tests/test_fetch_research_filter.sh` (NEW), VERSION 0.4.0 → 0.4.1.
+- Change: pre-filter layer in `fetch_research.py` runs before existing keyword relevance check. URL deny pattern (1 entry: BS `/what-its-like-to-be-*` profile series) + title keyword deny (9 entries: biomarker / screening / discovery / epidemiology research-type signals). Skipped items append to `_logs/research-fetch-skipped.log` (gitignored) for periodic calibration. Disease-name keywords intentionally NOT filtered — vault Creativity axis (DMN/CEN switching, incubation neuroscience) actively uses neuroscience research with clinical comparisons.
+- Retroactive impact: 3 of 13 historical rejections (~23%) would have been auto-skipped (BS profile ×2 + blood test depression ×1). Lower than the spec §3.5 estimate of 4/13 because the actual feed-stored title for "nose Alzheimer's" did not contain `early detection` substring; spec assumed phrasing the RSS feed didn't deliver.
+- Live verification: end-to-end smoke run during Task 4 implementation found 2 actual BS profile-series items in the live RSS feed and skipped them (URL_DENY_profile rule). Filter is working in production.
+- Tests: 9/9 unit (`test_fetch_research_filter.sh`) + 8/8 setup (regression).
+- Watch implications:
+  - **Watch 21 partially retired** — pre-filter handles A category (URL profile) + part of C category (biomarker/blood-test/screening). B category (BS essay/methodology meta) and D category (sample-limited population) remain in human review queue. Trigger marker resolved (sub-project shipped).
+  - **Watch 25 NEW** — Pre-filter calibration trigger. Audit `_logs/research-fetch-skipped.log` periodically. Calibration trigger: ≥ 20 entries OR human-review false-positive detected. Expansion trigger: ≥ 3 same-pattern human-rejected articles share a non-disease-name signature. Action: edit rule constants in `scripts/fetch_research.py`, sync, commit.
+
 ## v0.4.0 — 2026-04-26 — Phase 7-2: Plugin distribution + research automation
 
 - Kind: structure
