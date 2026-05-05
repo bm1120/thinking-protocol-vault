@@ -1,6 +1,7 @@
 ---
 name: worst-possible-idea
 description: Deliberately generate the worst possible ideas for a problem, then invert each into a surprising positive. Use in Diverge when ideas feel too safe or evaluation-anxiety is blocking generation.
+system: true
 ---
 
 # worst-possible-idea

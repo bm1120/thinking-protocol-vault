@@ -19,6 +19,27 @@ Semantic versioning:
 
 ---
 
+## v0.4.0 — 2026-04-26 — Phase 7-2: Plugin distribution + research automation
+
+- Kind: structure
+- Source: `docs/superpowers/specs/2026-04-26-phase-7-2-plugin-distribution-design.md`; `docs/superpowers/plans/2026-04-26-phase-7-2-plugin-distribution.md`
+- Affected files: NEW `bm1120/thinking-protocol-plugin` repo (plugin.json, lib/migrate.sh, lib/classify.sh, commands/migrate.{md,sh}, hooks/plugin-{hooks.json,session-start.sh}, system_files/, tests/), NEW `scripts/sync_to_plugin.sh`, NEW `_template/tests/test_layer1_v04.sh` + `_template/tests/test_sync_to_plugin.sh`, MODIFY all 16 skill SKILL.md + 6 agent .md (frontmatter `system: true`), MODIFY `_template/.claude/hooks/session-start.sh` (first-line marker + multi-line reminder), MODIFY `_template/scripts/fetch_research.py` (first-line marker), MODIFY `_template/Core_Thinking_Protocol.md` + `_template/Stage_Transition_Rules.md` + `_template/Research_Integration_Protocol.md` (frontmatter blocks), MODIFY `_template/SETUP.md` (Migration & rollback section), MODIFY `_template/.gitignore` (+ `_backup/`, `_logs/`), MODIFY `_template/VERSION` (0.3.0 → 0.4.0).
+- Change: hybrid distribution model. Existing vaults run `/plugin install bm1120/thinking-protocol-plugin` then `/migrate` to migrate from v0.1-0.3, with auto-backup to `_backup/<timestamp>/` and frontmatter-driven fork detection (`system: false` files preserved). `scripts/sync_to_plugin.sh` keeps plugin repo derived from `_template/`. Research feed Step 1 automation: OS crontab fallback (plugin spec lacks `schedules` per Task 1 findings). Researcher subagent invocation surface validated structurally (plugin manifest registers agents); end-to-end surfacing requires user verification in fresh Claude session per Task 17 dogfood notes.
+- Shadow Test: source vault dogfood (Task 17, `00_Idea_Inbox/Dogfood_Notes_2026-04-26_phase-7-2-plugin.md`). Acceptance checklist: PASS_WITH_NOTES (researcher surfacing pending manual verification, framer.md source-vault drift documented as Watch 24).
+- Tests: 8/8 setup PASS; 11/11 sync_to_plugin PASS; 20/20 layer1_v04 PASS; 12/12 layer_marking PASS; 11/11 migration PASS.
+
+### Watch list updates
+
+- **Watch 18 retired** — template upgrade gap closed by hybrid distribution model.
+- **Watch 19 partially retired** — Step 1 automation closed via cron registration in `register_cron_if_consented`. Researcher invocation surface implemented at structural level (plugin manifest); end-to-end verification pending. Steps 2-6 automation deferred → tracked under new Watch 21.
+- **Watch 20 NEW** — Cron job availability. Plan-stage finding (Task 1) confirmed plugin spec has no `schedules` field. Mitigation in place via OS crontab fallback in `lib/migrate.sh`. Trigger: dogfood Task 17 cron declined path verified, but consented path needs separate test in real session.
+- **Watch 21 NEW (TRIGGER FIRED 2026-05-05)** — Pre-filter threshold for research absorption. Observation #1 = 2026-04-26 batch (0/7 acceptance + clinical-pathology dominance, `04_Archives/research_rejected/2026-04-26-batch-rejection.md`). Observation #2 = 2026-05-05 batch (0/6 acceptance + same dominance pattern, `04_Archives/research_rejected/2026-05-05-batch-rejection.md`). Cumulative: 0/13 unique articles, ~55 min human cost. **Trigger threshold met** (≥2 observations per Anti-Pattern #6). Next action: design pre-filter rule for `scripts/fetch_research.py` as harness-modification sub-project (Phase 7-3 candidate). Candidate rules: clinical-pathology keyword skip on ScienceDaily titles, profile-series URL skip, essay/meta heuristic.
+- **Watch 22 NEW** — Hybrid distribution model migration failures. Track post-release. Trigger: any external user reports `/migrate` failure not covered by spec §5.4 edge cases.
+- **Watch 23 NEW** — Fork frequency. Track usage. Trigger: ≥3 distinct system files toggled to `system: false` → revisit hybrid file policy (currently CLAUDE.md vault-root = entirely user, may need finer-grained marking).
+- **Watch 24 NEW** — Source vault `framer.md` drift from plugin distribution. Source vault has source-vault-only customization (examples/domain-contexts bullets per CLAUDE.md §6) that plugin doesn't ship; `/migrate` overwrites them. Mitigation options for v0.4.1+: (a) mark source-vault `framer.md` as `system: false` permanently, or (b) source-vault devs `git checkout -- .claude/agents/framer.md` after each /migrate. Trigger: user reports it as friction in source-vault dev workflow.
+
+---
+
 ## 2026-04-26 — v0.3.0 — Vault evolution skills (context-engineering + harness-modification)
 
 - Kind: minor (additive — 2 new workflow skills, no spec breakage, no setup procedure change)

@@ -1,6 +1,7 @@
 ---
 name: jobs-to-be-done
 description: Extract the underlying job a user is "hiring" a product or decision to do, using JTBD phrasing. Use in Frame (problem definition) or Converge (testing whether a solution actually serves the real job).
+system: true
 ---
 
 # jobs-to-be-done

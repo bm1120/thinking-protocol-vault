@@ -1,6 +1,7 @@
 ---
 name: remote-association-matrix
 description: Force an intersection between the problem and a random distant concept to surface non-obvious ideas. Use in Diverge to escape local maxima.
+system: true
 ---
 
 # remote-association-matrix

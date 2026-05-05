@@ -1,6 +1,7 @@
 ---
 name: bias-check
 description: Surface the active cognitive biases in a decision (sunk cost, confirmation, survivorship, p-hacking, availability, anchoring, causal illusion) and propose counter-measures. Use in Converge on every non-trivial decision.
+system: true
 ---
 
 # bias-check

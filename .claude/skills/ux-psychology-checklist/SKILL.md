@@ -1,6 +1,7 @@
 ---
 name: ux-psychology-checklist
 description: Review a UI or feature against user-psychology checkpoints (choice architecture, emotion triggers, trust signals, cognitive load). Use in Converge for UX-touching decisions.
+system: true
 ---
 
 # ux-psychology-checklist

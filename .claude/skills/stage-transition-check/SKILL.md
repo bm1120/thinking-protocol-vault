@@ -1,6 +1,7 @@
 ---
 name: stage-transition-check
 description: Judge whether the current stage's Exit criteria are met and the next stage's Entry criteria are satisfied. Invoke whenever a subagent is about to hand off, or the user asks "can we move on?".
+system: true
 ---
 
 # stage-transition-check

@@ -1,6 +1,7 @@
 ---
 name: diverge-compression
 description: Pre-categorize a Diverge output of ≥ 15 ideas into 5–10 groups before Converge dispatch, to keep validator's working memory tractable. Preserves original idea numbers.
+system: true
 ---
 
 # diverge-compression

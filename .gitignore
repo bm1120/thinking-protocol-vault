@@ -16,3 +16,9 @@ scripts/__pycache__/
 
 # Obsidian workspace state (per-machine, churns frequently)
 .obsidian/
+
+# Backup snapshots created by /migrate command (per-vault, never committed).
+_backup/
+
+# Log directory written by scripts/fetch_research.py and other automation.
+_logs/

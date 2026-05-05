@@ -1,3 +1,4 @@
+# managed-by: thinking-protocol-plugin
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime
@@ -68,12 +69,20 @@ def main():
         header = f"## 📅 {today_str} 업데이트\n"
         body = "\n".join(new_entries) + "\n\n"
         title = "# 🤖 자동화된 연구 피드 (Automated Research Feed)\n\n매일 아침 9시에 행동경제학 및 의사결정 관련 최신 아티클이 이곳에 업데이트됩니다.\n\n---\n\n"
-        
-        # 파일 최상단에 최신 내용을 삽입 (내림차순 정렬)
+
+        # 새 entries 삽입: 첫 번째 `\n---\n\n` divider 직후에 넣기 (제목 영역 customization에 견고).
+        # 파일 자체가 비어있거나 제목 헤더가 없으면 신규 생성.
         if not existing_content.startswith("# 🤖"):
             new_content = title + header + body + existing_content
         else:
-            new_content = existing_content.replace(title, title + header + body, 1)
+            divider = "\n---\n\n"
+            divider_pos = existing_content.find(divider)
+            if divider_pos == -1:
+                # divider 없음 — 안전하게 파일 맨 앞에 prepend
+                new_content = title + header + body + existing_content
+            else:
+                insert_pos = divider_pos + len(divider)
+                new_content = existing_content[:insert_pos] + header + body + existing_content[insert_pos:]
             
         with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
             f.write(new_content)

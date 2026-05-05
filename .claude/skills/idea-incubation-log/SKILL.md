@@ -1,6 +1,7 @@
 ---
 name: idea-incubation-log
 description: Record an idea set with a revisit-date schedule, so the Incubate stage is not bypassed. Use immediately after Diverge.
+system: true
 ---
 
 # idea-incubation-log

@@ -1,6 +1,7 @@
 ---
 name: premortem-analysis
 description: Run a pre-mortem — imagine the decision has failed 12 months from now and explain why — to surface failure modes the current framing hides. Use in Converge before finalizing a non-trivial decision.
+system: true
 ---
 
 # premortem-analysis

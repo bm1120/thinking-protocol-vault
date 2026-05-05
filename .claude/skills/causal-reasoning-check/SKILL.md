@@ -1,6 +1,7 @@
 ---
 name: causal-reasoning-check
 description: Scrutinize any causal claim in a decision — separate correlation from causation, surface missing confounders, consider at least one counterfactual. Mandatory in Converge for any claim of the form "X causes Y" or "X will improve Y".
+system: true
 ---
 
 # causal-reasoning-check

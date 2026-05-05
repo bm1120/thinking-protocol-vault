@@ -1,6 +1,7 @@
 ---
 name: harness-modification
 description: Use when modifying vault harness files (.claude/hooks/*.sh, .claude/settings.json, scripts/*.py, scripts/*.sh) — the executable runtime that enforces specs at execution time. Distinct from context-engineering (markdown specs Claude reads). Step 0 diagnosis + complexity gate + TDD-style implementation.
+system: true
 ---
 
 # harness-modification

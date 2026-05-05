@@ -1,6 +1,7 @@
 ---
 name: context-engineering
 description: Use when modifying vault context files (CLAUDE.md, *_Context.md, agent.md, SKILL.md, Stage_Transition_Rules.md, Core_Thinking_Protocol.md) — the markdown specs Claude reads as instructions. Distinct from harness-modification (executable runtime). Step 0 diagnosis verifies the change is genuinely a context concern (not harness, not data, not premature speculation).
+system: true
 ---
 
 # context-engineering

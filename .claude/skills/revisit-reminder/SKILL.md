@@ -1,6 +1,7 @@
 ---
 name: revisit-reminder
 description: Schedule a notification to fire at the Incubate revisit trigger time, so the user is reminded to invoke validator on the rested set. Opt-in per session.
+system: true
 ---
 
 # revisit-reminder

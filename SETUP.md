@@ -199,3 +199,45 @@ Source vault가 진화하면 새 template 버전이 출시됩니다. 자동 merg
 3. **Watch list 모니터링** — §8 영역에서 트리거 발생 시 source vault 알림
 
 이 vault는 **Anti-Pattern #6 (no speculative engineering)**을 따릅니다. 구체적 문제가 발생하지 않은 채 spec을 변경하지 마세요.
+
+## Migration & rollback (v0.4+)
+
+This vault uses a hybrid distribution model from v0.4.0:
+- **Vault scaffold** (this repo) ships user-layer + bootstrap
+- **Plugin** (`bm1120/thinking-protocol-plugin`) ships system layer (skills/agents/hooks/Core protocol/fetch script)
+
+### Migration from v0.1-0.3
+
+If your vault was created before v0.4.0:
+
+1. `claude` (start session in vault)
+2. `/plugin install bm1120/thinking-protocol-plugin`
+3. `/migrate` — auto-detects existing vault, creates `_backup/<timestamp>/`, overwrites system files with v0.4.0 versions
+4. Run: `./setup.sh --verify`
+5. If 8/8 PASS: migration successful
+6. If failure: `cp -rp _backup/<timestamp>/. . && ./setup.sh --verify` (rollback)
+
+### Updating
+
+```
+/plugin update
+/migrate
+```
+
+`/migrate` is idempotent: same backup+overwrite logic. Forked system files (frontmatter `system: false`) are preserved.
+
+### Forking a system file
+
+To customize a system file without losing your changes on plugin update:
+1. Open the file (e.g., `.claude/agents/researcher.md`)
+2. Change frontmatter `system: true` → `system: false`
+3. Optionally add `forked_from: <plugin_version>`
+4. Edit freely. `/migrate` will skip this file.
+
+### Rollback
+
+The most recent `/migrate` invocation creates a backup at `_backup/<timestamp>/`.
+- Rollback: `cp -rp _backup/<timestamp>/. .` (note trailing `/.` for dotfiles)
+- After rollback, optionally: `/plugin uninstall thinking-protocol-plugin`
+
+Backups accumulate; prune manually if needed (e.g., `rm -rf _backup/2026-*`).

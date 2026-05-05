@@ -1,6 +1,7 @@
 ---
 name: scamper-ideation
 description: Apply the SCAMPER framework (Substitute / Combine / Adapt / Modify / Put to another use / Eliminate / Reverse) to systematically vary an existing concept. Use during Diverge when obvious angles are exhausted.
+system: true
 ---
 
 # scamper-ideation

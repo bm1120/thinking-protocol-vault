@@ -3,6 +3,8 @@ tags:
   - core
   - research_integration
 date: 2026-04-24
+system: true
+managed_by: thinking-protocol-plugin
 ---
 
 # Research Integration Protocol

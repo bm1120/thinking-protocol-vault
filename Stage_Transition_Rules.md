@@ -4,6 +4,8 @@ tags:
   - transitions
   - six_stage
 date: 2026-04-24
+system: true
+managed_by: thinking-protocol-plugin
 ---
 
 # Stage Transition Rules

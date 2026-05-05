@@ -1,6 +1,7 @@
 ---
 name: strategic-decision-journal
 description: Record a strategic decision with rationale, assumptions, alternatives considered, retrospective trigger, and Co-Execution Scope. Use in Decide for non-trivial decisions where traceability matters.
+system: true
 ---
 
 # strategic-decision-journal

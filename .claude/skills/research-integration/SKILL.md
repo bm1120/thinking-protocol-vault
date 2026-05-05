@@ -1,6 +1,7 @@
 ---
 name: research-integration
 description: Execute the 6-step Research Integration Protocol on a single research item (feed entry, paper, blog post). Turn it into exactly one of Merge / Defer / Reject — never "read and forget".
+system: true
 ---
 
 # research-integration
