@@ -188,9 +188,9 @@ Source vault가 진화하면 새 template 버전이 출시됩니다. 자동 merg
 
 ## 10. License & attribution
 
-- 이 template은 Business_SecondBrain vault 기반 (date: 2026-04-24).
+- 이 template은 source meta-vault 기반 (date: 2026-04-24).
 - 신경과학 KB seed notes는 cited research 인용 — 사용자가 자기 KB 추가 시 동일 원칙 따라야 합니다.
-- License: TBD by source vault maintainer (현재 명시되지 않음).
+- License: MIT (see `LICENSE`).
 
 ## 다음 단계
 

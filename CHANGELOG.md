@@ -128,7 +128,7 @@ Backward-compatibility verified by Test 6 (env file path) plus T1-T5 (inline env
 - Migration: N/A (initial release — no prior version)
 - Breaking: N/A
 
-Initial portable bundle from source vault `Business_SecondBrain` Phase 1-5 complete state:
+Initial portable bundle from the source meta-vault, Phase 1-5 complete state:
 
 - 3 Core protocol files (Core_Thinking_Protocol, Stage_Transition_Rules, Research_Integration_Protocol)
 - 6 subagents (framer, ideator, incubator, validator, presenter, researcher)
