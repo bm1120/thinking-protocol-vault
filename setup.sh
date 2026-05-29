@@ -105,17 +105,17 @@ case "$MODE" in
     fi
 
     dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    # setup.sh and tests/ legitimately contain {{VAR}} patterns (sed commands,
-    # test fixture strings) — exclude them from the orphan scan to avoid false
-    # positives. The scan still covers all template-output files (.md, .json,
-    # hook .sh under .claude/hooks/, etc.).
+    # setup.sh, tests/, and skill/agent docs legitimately contain {{VAR}} patterns
+    # (sed commands, test fixtures, documentation examples) — exclude them from the
+    # orphan scan to avoid false positives. The scan still covers all template-output
+    # files (CLAUDE.md, settings.json, <Domain>_Context.md, hook .sh, etc.).
     # `|| true` is required because grep exits 1 on zero matches (the normal
     # success case here); under `set -euo pipefail` that would otherwise abort
     # the script with no diagnostic.
-    orphans=$( (grep -rE "\{\{[A-Z_]+\}\}" "$dir" --include="*.md" --include="*.json" --include="*.sh" --exclude="setup.sh" --exclude-dir="tests" 2>/dev/null || true) | wc -l | tr -d ' ')
+    orphans=$( (grep -rE "\{\{[A-Z_]+\}\}" "$dir" --include="*.md" --include="*.json" --include="*.sh" --exclude="setup.sh" --exclude-dir="tests" --exclude-dir="skills" --exclude-dir="agents" 2>/dev/null || true) | wc -l | tr -d ' ')
     if [ "$orphans" -gt 0 ]; then
       echo "FAIL: $orphans orphan {{VAR}} markers found:" >&2
-      grep -rEn "\{\{[A-Z_]+\}\}" "$dir" --include="*.md" --include="*.json" --include="*.sh" --exclude="setup.sh" --exclude-dir="tests" 2>/dev/null >&2
+      grep -rEn "\{\{[A-Z_]+\}\}" "$dir" --include="*.md" --include="*.json" --include="*.sh" --exclude="setup.sh" --exclude-dir="tests" --exclude-dir="skills" --exclude-dir="agents" 2>/dev/null >&2
       exit 1
     fi
 
@@ -169,7 +169,7 @@ case "$MODE" in
 
     rm -rf "$backup_dir"
 
-    "$0" --verify
+    bash "$0" --verify
     ;;
 
   *)
